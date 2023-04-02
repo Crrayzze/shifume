@@ -5,14 +5,18 @@ import { io } from 'socket.io-client';
 
 function App() {
 
-  const connect = () => {
-    const socket = io('http://localhost:8000');
-    console.log(socket)
-  }
+  // const connect = () => {
+  //   const socket = io('http://localhost:8000');
+  //   console.log(socket)
 
-  useEffect(() => {
-    connect()
-  }, []);
+  //   socket.on('connect', () => {
+  //     socket.emit('custom_event', 'Hello World')
+  //   })
+  // }
+
+  // useEffect(() => {
+  //   connect()
+  // }, []);
 
   return (
     <div>
