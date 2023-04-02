@@ -1,18 +1,27 @@
-import "reflect-metadata";
-import app from "./index";
-import socketServer from "./socket";
-import { Request, Response} from 'express';
-import * as http from 'http';
+import 'reflect-metadata';
+import { SocketControllers } from 'socket-controllers';
+import { Server } from 'socket.io';
+import { Container } from 'typedi';
+import { MainController } from './api/controllers/mainController';
+import express, { Express } from 'express';
+import http from 'http';
 
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
-});
-
-var server = http.createServer(app);
+const app: Express = express();
+const server: http.Server = http.createServer(app);
+const io: Server = new Server(server, {
+  cors: {
+    origin: '*',
+    }
+  }
+);
 
 server.listen(8000, () => {
-  console.log('Server running on port 8000');
+  console.log('listening on :8000');
 });
 
-const io = socketServer(server);
+app.get('/', function (req: any, res: any) {
+  res.send('hello world');
+});
+
+
+new SocketControllers({io, container: Container, controllers: [MainController]});
