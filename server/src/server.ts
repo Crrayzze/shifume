@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { SocketControllers } from 'socket-controllers';
 import { Server } from 'socket.io';
 import { Container } from 'typedi';
-import { MainController } from './api/controllers/mainController';
 import express, { Express } from 'express';
 import http from 'http';
 
@@ -24,4 +23,4 @@ app.get('/', function (req: any, res: any) {
 });
 
 
-new SocketControllers({io, container: Container, controllers: [MainController]});
+new SocketControllers({io, container: Container, controllers: [__dirname + '/api/controllers/*.ts']});
