@@ -10,14 +10,15 @@ export const Game = () => {
   const [userScore, setUserScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   const [result , setResult] = useState(null);
+  const [round, setRound] = useState(0);
+  const [seconds, setSeconds] = useState(null);
+
   const choices = ["rock", "paper", "scissors"];
 
   const handleUserChoice = (choice) => {
-    // console.log("handleUserChoice: ", choice)
     setUserChoice(choice);
     if (socketService.socket)
       gameService.updateGame(socketService.socket, choice);
-    // handleOpponentChoice();
   }
 
   const timOver = () => {
@@ -31,11 +32,6 @@ export const Game = () => {
       }
     }
   }
-  
-  const handleRandomChoice = () => {
-    const randomChoice = choices[Math.floor(Math.random() * choices.length)];
-    setUserChoice(randomChoice);
-  }
 
   const handleGameUpdate = () => {
     if (socketService.socket)
@@ -45,9 +41,33 @@ export const Game = () => {
         console.log("handleGameUpdate: ", data)
       });
   }
+    
+  const handleGameStart = () => {
+    if (socketService.socket)
+      gameService.onGameStart(socketService.socket, (data) => {
+        console.log("handleGameStart: ", data)
+        setRound(1);
+        setSeconds(5);
+      });
+  }
+
+  const handleGameRound = () => {
+    if (socketService.socket) {
+      gameService.newRound(socketService.socket, round + 1)
+      gameService.onNewRound(socketService.socket, (data) => {
+        console.log("handleGameRound: ", data)
+        setRound(data.round);
+        setUserChoice(null);
+        setOpponentChoice(null);
+        setResult(null);
+        setSeconds(5);
+      });
+    }
+  }
 
   useEffect(() => {
     handleGameUpdate();
+    handleGameStart();
   }, [])
 
   useEffect(() => {
@@ -79,26 +99,31 @@ export const Game = () => {
         setResult("You lose...");
         setOpponentScore(opponentScore + 1);
       }
+      handleGameRound()
     }
   }, [userChoice, opponentChoice]);
 
   return (
     <div>
+      {round === 0 && <h1>Waiting for your opponent to join the room...</h1>}
+      {round > 0 && <>
       <h1>You VS Opponent</h1>
       <div>Your score: {userScore}</div>
       <div>Opponent score: {opponentScore}</div>
+      <div>Round: {round}</div>
       {choices.map((choice) => {
         return (
           <button key={choice} onClick={() => handleUserChoice(choice)}>{choice}</button>
-        );
-      })}
+          );
+        })}
       <p>Your choice: {userChoice}</p>
       <p>Opponent choice: {opponentChoice}</p>
       <h1>{ result }</h1>
       <div style={{width: "100px"}}>
-
-      <Timer timOver={timOver} />
+        <Timer timOver={timOver} seconds={seconds} setSeconds={setSeconds} />
       </div>
+        </>
+      }
     </div>
   );
 }
