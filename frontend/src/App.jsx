@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { Home } from './pages/home/home';
+import { Game } from './scenes/game/game';
 import socketService from './services/socket/socket';
 import { JoinRoom } from './components/joinRoom/joinRoom';
 import GameContext from './context/gameContext';
@@ -26,8 +26,8 @@ function App() {
 
   return (
     <GameContext.Provider value={gameContextValue}>
-      <Home />
-      <JoinRoom />
+      {!isInRoom && <JoinRoom />}
+      {isInRoom && <Game />}
     </GameContext.Provider>
   );
 }
