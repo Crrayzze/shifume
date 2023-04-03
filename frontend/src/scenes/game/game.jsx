@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import gameService from "../../services/game/game";
 import socketService from "../../services/socket/socket";
+import { Timer } from "../../components/timer/timer";
 
 export const Game = () => {
 
@@ -18,10 +19,22 @@ export const Game = () => {
       gameService.updateGame(socketService.socket, choice);
     // handleOpponentChoice();
   }
+
+  const timOver = () => {
+    if (socketService.socket) {
+      if (userChoice)
+        gameService.updateGame(socketService.socket, userChoice);
+      else {
+        const random = choices[Math.floor(Math.random() * choices.length)];
+        setUserChoice(random);
+        gameService.updateGame(socketService.socket, random);
+      }
+    }
+  }
   
-  const handleOpponentChoice = () => {
+  const handleRandomChoice = () => {
     const randomChoice = choices[Math.floor(Math.random() * choices.length)];
-    setOpponentChoice(randomChoice);
+    setUserChoice(randomChoice);
   }
 
   const handleGameUpdate = () => {
@@ -82,6 +95,10 @@ export const Game = () => {
       <p>Your choice: {userChoice}</p>
       <p>Opponent choice: {opponentChoice}</p>
       <h1>{ result }</h1>
+      <div style={{width: "100px"}}>
+
+      <Timer timOver={timOver} />
+      </div>
     </div>
   );
 }
