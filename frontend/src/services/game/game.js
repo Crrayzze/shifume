@@ -10,14 +10,24 @@ class GameService {
   }
 
   updateGame(socket, gameChoice) {
-    // console.log('updateGame: ', gameChoice)
     socket.emit('update_game', { gameChoice: gameChoice, from: socket.id });
   }
 
-  // Should maybe change this to onGameUpdate
   async onGameUpdate(socket, listener) {
     socket.on('on_game_update', listener);
     console.log('onGameUpdate')
+  }
+
+  async onGameStart(socket, listener) {
+    socket.on("start_game", listener);
+  }
+
+  newRound(socket, round) {
+    socket.emit("start_new_round", { round: round });
+  }
+
+  async onNewRound(socket, listener) {
+    socket.on("on_new_round", listener);
   }
 
 }
