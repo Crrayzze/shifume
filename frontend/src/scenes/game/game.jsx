@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Timer } from "../../components/timer/timer";
 import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
+import gameService from "../../services/game/game";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -46,7 +47,12 @@ export const Game = ({ setIsInRoom }) => {
 
   return (
     <div>
-      {round === 0 && <h1>Waiting for your opponent to join the room...</h1>}
+      {round === 0 && (
+        <>
+          <h1>Waiting for your opponent to join the room...</h1>
+          <h1>Share this code with your friend: {gameService.roomId}</h1>
+        </>
+      )}
       {round > 0 && (
         <>
           <h1>You VS Opponent</h1>
