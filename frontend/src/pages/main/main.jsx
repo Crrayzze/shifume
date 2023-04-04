@@ -20,6 +20,7 @@ export const Main = () => {
 
   return (
     <div className="main-container">
+      <h1 className="game-name">SHIFUMI</h1>
       
       {!isInRoom && <JoinRoom setIsInRoom={setIsInRoom} />}
       {isInRoom && <Game setIsInRoom={setIsInRoom} />}
