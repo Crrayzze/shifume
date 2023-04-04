@@ -42,4 +42,22 @@ export class RoomController {
       }
     }
   }
+
+  @OnMessage("leave_game")
+  async leaveGame(
+    @SocketIO() io: Server,
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() message: any
+  ) {
+    console.log("User left game: ", message);
+
+    const socketRooms = Array.from(socket.rooms.values()).filter(
+      (room) => room !== socket.id
+    );
+
+    if (socketRooms.length > 0) {
+      await socket.leave(message.roomId);
+      socket.emit("room_left", { roomId: message.roomId });
+    }
+  }
 }

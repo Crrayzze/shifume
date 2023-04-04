@@ -3,7 +3,7 @@ import { Timer } from "../../components/timer/timer";
 import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
 
-export const Game = () => {
+export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
   const [opponentChoice, setOpponentChoice] = useState(null);
   const [userScore, setUserScore] = useState(0);
@@ -14,6 +14,7 @@ export const Game = () => {
   const [interRoundTime, setInterRoundTime] = useState(null);
   const [isWaitingForOpponentChoice, setIsWaitingForOpponentChoice] =
     useState(true);
+  const [isGameOver, setIsGameOver] = useState(false);
   const gameLogic = useMemo(() => {
     return new GameLogic(
       setUserChoice,
@@ -24,7 +25,8 @@ export const Game = () => {
       setRound,
       setRoundTime,
       setInterRoundTime,
-      setIsWaitingForOpponentChoice
+      setIsWaitingForOpponentChoice,
+      setIsGameOver
     );
   }, []);
 
@@ -34,29 +36,12 @@ export const Game = () => {
   }, [gameLogic]);
 
   useEffect(() => {
-    if (userChoice && opponentChoice) {
-      if (userChoice === opponentChoice) {
-        setResult("It's a draw!");
-      } else if (userChoice === "rock" && opponentChoice === "scissors") {
-        setResult("You win!");
-        setUserScore(userScore + 1);
-      } else if (userChoice === "rock" && opponentChoice === "paper") {
-        setResult("You lose...");
-        setOpponentScore(opponentScore + 1);
-      } else if (userChoice === "paper" && opponentChoice === "rock") {
-        setResult("You win!");
-        setUserScore(userScore + 1);
-      } else if (userChoice === "paper" && opponentChoice === "scissors") {
-        setResult("You lose...");
-        setOpponentScore(opponentScore + 1);
-      } else if (userChoice === "scissors" && opponentChoice === "paper") {
-        setResult("You win!");
-        setUserScore(userScore + 1);
-      } else if (userChoice === "scissors" && opponentChoice === "rock") {
-        setResult("You lose...");
-        setOpponentScore(opponentScore + 1);
-      }
-    }
+    gameLogic.checkRoundResult(
+      userChoice,
+      opponentChoice,
+      userScore,
+      opponentScore
+    );
   }, [userChoice, opponentChoice]);
 
   return (
@@ -81,24 +66,46 @@ export const Game = () => {
           <p>Your choice: {userChoice}</p>
           <p>Opponent choice: {opponentChoice}</p>
           <Timer
-            timeOver={() => gameLogic.roundTimeOver(userChoice)}
+            timeOver={() => {
+              if (!gameLogic.verifyWinCondition(userScore, opponentScore))
+                gameLogic.roundTimeOver(userChoice);
+            }}
             seconds={roundTime}
             setSeconds={setRoundTime}
           />
-          {isWaitingForOpponentChoice && roundTime === 0 && (
+          {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
             <h1>Waiting for opponent choice</h1>
           )}
-          {interRoundTime >= 0 && !isWaitingForOpponentChoice && (
-            <>
-              <h1>{result}</h1>
-              <h1>Next round in {interRoundTime} seconds</h1>
-              <Timer
-                timeOver={() => gameLogic.newRound(round)}
-                seconds={interRoundTime}
-                setSeconds={setInterRoundTime}
-              />
-            </>
-          )}
+          {interRoundTime >= 0 &&
+            !isWaitingForOpponentChoice &&
+            !isGameOver && (
+              <>
+                <h1>{result}</h1>
+                <h1>Next round in {interRoundTime} seconds</h1>
+                <Timer
+                  timeOver={() => {
+                    gameLogic.newRound(round);
+                    console.log("actual round: ", round);
+                  }}
+                  seconds={interRoundTime}
+                  setSeconds={setInterRoundTime}
+                />
+              </>
+            )}
+        </>
+      )}
+      {isGameOver && (
+        <>
+          <h1>Game over!</h1>
+          <h1>{result}</h1>
+          <button
+            onClick={() => {
+              setIsInRoom(false);
+              gameLogic.leaveTheGame();
+            }}
+          >
+            Leave room
+          </button>
         </>
       )}
     </div>
