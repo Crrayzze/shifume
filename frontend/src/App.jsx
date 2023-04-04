@@ -3,13 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Game } from "./scenes/game/game";
 import socketService from "./services/socket/socket";
 import { JoinRoom } from "./components/joinRoom/joinRoom";
-import GameContext from "./context/gameContext";
 
 function App() {
   const [isInRoom, setIsInRoom] = useState(false);
 
   const connectSocket = async () => {
-    const socket = await socketService
+    await socketService
       .connect("http://localhost:8000")
       .catch((err) => {
         console.log("Error: ", err);
@@ -18,18 +17,14 @@ function App() {
 
   useEffect(() => {
     connectSocket();
+    console.log("useEffect run")
   }, []);
 
-  const gameContextValue = {
-    isInRoom,
-    setIsInRoom,
-  };
-
   return (
-    <GameContext.Provider value={gameContextValue}>
-      {!isInRoom && <JoinRoom />}
+    <div>
+      {!isInRoom && <JoinRoom setIsInRoom={setIsInRoom} />}
       {isInRoom && <Game setIsInRoom={setIsInRoom}/>}
-    </GameContext.Provider>
+    </div>
   );
 }
 
