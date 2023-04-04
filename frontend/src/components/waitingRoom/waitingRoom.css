@@ -1,0 +1,20 @@
+.waiting-room-container {
+  height: 250px;
+}
+
+.waiting-room {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.waiting-room-text {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 30px;
+  align-items: start;
+  padding-top: 60px;
+}

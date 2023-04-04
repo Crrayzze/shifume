@@ -3,6 +3,7 @@ import { Timer } from "../../components/timer/timer";
 import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
 import gameService from "../../services/game/game";
+import { WaitingRoom } from "../../components/waitingRoom/waitingRoom";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -49,8 +50,7 @@ export const Game = ({ setIsInRoom }) => {
     <div>
       {round === 0 && (
         <>
-          <h1>Waiting for your opponent to join the room...</h1>
-          <h1>Share this code with your friend: {gameService.roomId}</h1>
+          <WaitingRoom />
         </>
       )}
       {round > 0 && (
