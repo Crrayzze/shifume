@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import socketService from "../../services/socket/socket";
 import gameService from "../../services/game/game";
+import "./joinRoom.css";
+import { Tutorial } from "../tutorial/tutorial";
 
 export const JoinRoom = ({ setIsInRoom }) => {
   const [roomID, setRoomID] = useState("");
@@ -50,25 +52,44 @@ export const JoinRoom = ({ setIsInRoom }) => {
   };
 
   return (
-    <div>
-      <form>
-        <h1>Create a new room</h1>
-        <button disabled={isJoining} onClick={createRoom}>
-          {isJoining ? "Joining..." : "Create"}
-        </button>
-      </form>
-      <form onSubmit={joinRoom}>
-        <h1>Enter room ID to join the game</h1>
-        <input
-          type="text"
-          placeholder="Room ID"
-          value={roomID}
-          onChange={handleRoomIDChange}
-        />
-        <button type="submit" disabled={isJoining}>
-          {isJoining ? "Joining..." : "Join"}
-        </button>
-      </form>
+    <div className="join-room-wrapper">
+      <div>
+        <h1>Play</h1>
+        <div className="join-room-container">
+          <form>
+            <h1 className="join-room-label">Create a new game</h1>
+            <button
+              disabled={isJoining}
+              onClick={createRoom}
+              className="simple-button"
+            >
+              {isJoining ? "Joining..." : "Create"}
+            </button>
+          </form>
+          <div className="or">OR</div>
+          <form onSubmit={joinRoom}>
+            <div>
+              <h1 className="join-room-label">Join a game with its code</h1>
+              <input
+                type="text"
+                placeholder="Room ID"
+                value={roomID}
+                onChange={handleRoomIDChange}
+                className="join-room-input"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isJoining}
+              className="simple-button"
+            >
+              {isJoining ? "Joining..." : "Join"}
+            </button>
+          </form>
+          <div className="vertical-separator"></div>
+        </div>
+      </div>
+      <Tutorial />
     </div>
   );
 };
