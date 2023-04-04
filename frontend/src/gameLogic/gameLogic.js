@@ -26,12 +26,13 @@ export class GameLogic {
     this.setInterRoundTime = setInterRoundTime;
     this.setIsWaitingForOpponentChoice = setIsWaitingForOpponentChoice;
     this.setIsGameOver = setIsGameOver;
+    this.initialRoundTime = 5;
+    this.initialInterRoundTime = 5;
+    this.requiredScoreToWin = 3;
   }
 
   sendUserChoice(choice) {
     this.setUserChoice(choice);
-    if (socketService.socket)
-      gameService.updateGame(socketService.socket, choice);
   }
 
   roundTimeOver(userChoice) {
@@ -51,7 +52,7 @@ export class GameLogic {
       gameService.onGameUpdate(socketService.socket, (data) => {
         if (data.from !== socketService.socket.id) {
           this.setOpponentChoice(data.gameChoice);
-          this.setInterRoundTime(5);
+          this.setInterRoundTime(this.initialInterRoundTime);
           this.setIsWaitingForOpponentChoice(false);
         }
       });
@@ -62,30 +63,24 @@ export class GameLogic {
     if (socketService.socket) {
       gameService.onGameStart(socketService.socket, (data) => {
         this.setRound(1);
-        this.setRoundTime(5);
+        this.setRoundTime(this.initialRoundTime);
       });
     }
   }
 
-  newRound(round, result) {
-    try {
-      const newRound = round + 1;
-      if (socketService.socket) {
-        this.setRound(newRound);
-        gameService.newRound(socketService.socket, newRound);
-        gameService.onNewRound(socketService.socket, (data) => {
-          this.setUserChoice(null);
-          this.setOpponentChoice(null);
-          this.setRoundTime(5);
-          this.setResult(null);
-          this.setInterRoundTime(null);
-          this.setIsWaitingForOpponentChoice(true);
-        });
-      } else {
-        console.log("pas de socket");
-      }
-    } catch (error) {
-      console.log(error);
+  newRound(round) {
+    const newRound = round + 1;
+    if (socketService.socket) {
+      this.setRound(newRound);
+      gameService.newRound(socketService.socket, newRound);
+      gameService.onNewRound(socketService.socket, (data) => {
+        this.setUserChoice(null);
+        this.setOpponentChoice(null);
+        this.setRoundTime(this.initialRoundTime);
+        this.setResult(null);
+        this.setInterRoundTime(null);
+        this.setIsWaitingForOpponentChoice(true);
+      });
     }
   }
 
@@ -116,14 +111,16 @@ export class GameLogic {
   }
 
   verifyWinCondition(userScore, opponentScore) {
-    if (userScore === 1) {
+    console.log("verifying win condition")
+    console.log(userScore, opponentScore)
+    if (userScore === this.requiredScoreToWin) {
       this.setResult("You win the game!");
       this.setRound(null);
       this.setRoundTime(null);
       this.setInterRoundTime(null);
       this.setIsGameOver(true);
       return true
-    } else if (opponentScore === 1) {
+    } else if (opponentScore === this.requiredScoreToWin) {
       this.setResult("You lose the game...");
       this.setRound(null);
       this.setRoundTime(null);
@@ -131,7 +128,6 @@ export class GameLogic {
       this.setIsGameOver(true);
       return true
     }
-    console.log("game not over")
     return false
   }
 
