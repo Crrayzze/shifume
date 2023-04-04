@@ -12,7 +12,8 @@ export class GameLogic {
     setResult,
     setRound,
     setRoundTime,
-    setInterRoundTime
+    setInterRoundTime,
+    setIsWaitingForOpponentChoice
   ) {
     this.setUserChoice = setUserChoice;
     this.setOpponentChoice = setOpponentChoice;
@@ -22,12 +23,13 @@ export class GameLogic {
     this.setRound = setRound;
     this.setRoundTime = setRoundTime;
     this.setInterRoundTime = setInterRoundTime;
+    this.setIsWaitingForOpponentChoice = setIsWaitingForOpponentChoice;
   }
 
   sendUserChoice(choice) {
     this.setChoice(choice);
     if (socketService.socket)
-      gameService.updateGame(socketService.socketsocket, choice);
+      gameService.updateGame(socketService.socket, choice);
   }
 
   roundTimeOver(userChoice) {
@@ -48,6 +50,7 @@ export class GameLogic {
         if (data.from !== socketService.socket.id) {
           this.setOpponentChoice(data.gameChoice);
           this.setInterRoundTime(5);
+          this.setIsWaitingForOpponentChoice(false);
         }
       });
     }
@@ -72,6 +75,7 @@ export class GameLogic {
         this.setRoundTime(5);
         this.setResult(null);
         this.setInterRoundTime(null);
+        this.setIsWaitingForOpponentChoice(true);
       });
     }
   }

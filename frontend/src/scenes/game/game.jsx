@@ -12,6 +12,8 @@ export const Game = () => {
   const [round, setRound] = useState(0);
   const [roundTime, setRoundTime] = useState(null);
   const [interRoundTime, setInterRoundTime] = useState(null);
+  const [isWaitingForOpponentChoice, setIsWaitingForOpponentChoice] =
+    useState(true);
   const gameLogic = useMemo(() => {
     return new GameLogic(
       setUserChoice,
@@ -21,7 +23,8 @@ export const Game = () => {
       setResult,
       setRound,
       setRoundTime,
-      setInterRoundTime
+      setInterRoundTime,
+      setIsWaitingForOpponentChoice
     );
   }, []);
 
@@ -82,7 +85,10 @@ export const Game = () => {
             seconds={roundTime}
             setSeconds={setRoundTime}
           />
-          {interRoundTime >= 0 && (
+          {isWaitingForOpponentChoice && roundTime === 0 && (
+            <h1>Waiting for opponent choice</h1>
+          )}
+          {interRoundTime >= 0 && !isWaitingForOpponentChoice && (
             <>
               <h1>{result}</h1>
               <h1>Next round in {interRoundTime} seconds</h1>
