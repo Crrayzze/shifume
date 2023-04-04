@@ -67,8 +67,7 @@ export const Game = ({ setIsInRoom }) => {
           <p>Opponent choice: {opponentChoice}</p>
           <Timer
             timeOver={() => {
-              if (!gameLogic.verifyWinCondition(userScore, opponentScore))
-                gameLogic.roundTimeOver(userChoice);
+              gameLogic.roundTimeOver(userChoice);
             }}
             seconds={roundTime}
             setSeconds={setRoundTime}
@@ -84,7 +83,8 @@ export const Game = ({ setIsInRoom }) => {
                 <h1>Next round in {interRoundTime} seconds</h1>
                 <Timer
                   timeOver={() => {
-                    gameLogic.newRound(round);
+                    if (!gameLogic.verifyWinCondition(userScore, opponentScore))
+                      gameLogic.newRound(round);
                     console.log("actual round: ", round);
                   }}
                   seconds={interRoundTime}
