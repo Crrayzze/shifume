@@ -1,0 +1,25 @@
+* {
+  font-family: 'Josefin Sans', sans-serif;
+  --webkit-font-smoothing: antialiased;
+  transition: 0.3s;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background-color: #1F2637;
+  --color-white: #D9D9D9;
+  --border-radius: 5px;
+}
+
+.app-container {
+  background-color: var(--background-color);
+  color: var(--color-white);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
