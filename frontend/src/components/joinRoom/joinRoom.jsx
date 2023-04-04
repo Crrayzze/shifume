@@ -5,7 +5,6 @@ import gameService from "../../services/game/game";
 import GameContext from "../../context/gameContext";
 
 export const JoinRoom = () => {
-
   const [roomID, setRoomID] = useState("");
   const [isJoining, setIsJoining] = useState(false);
 
@@ -14,34 +13,41 @@ export const JoinRoom = () => {
   const handleRoomIDChange = (e) => {
     const value = e.target.value;
     setRoomID(value);
-  }
+  };
 
   const joinRoom = async (e) => {
     e.preventDefault();
     const socket = socketService.socket;
 
-    if (!roomID || roomID.trim() === "" || !socket)
-      return;
-    
+    if (!roomID || roomID.trim() === "" || !socket) return;
+
     setIsJoining(true);
 
-    const joined = await gameService.joinGameRoom(socket, roomID).catch((err) => {
-      console.log("Error: ", err);
-      alert(err);
-    });
+    const joined = await gameService
+      .joinGameRoom(socket, roomID)
+      .catch((err) => {
+        console.log("Error: ", err);
+        alert(err);
+      });
 
-    if (joined)
-      setIsInRoom(true);
-    
+    if (joined) setIsInRoom(true);
+
     setIsJoining(false);
-  }
+  };
 
   return (
     <div>
       <form onSubmit={joinRoom}>
         <h1>Enter room ID to join the game</h1>
-        <input type="text" placeholder="Room ID" value={roomID} onChange={handleRoomIDChange}/>
-        <button type="submit" disabled={isJoining}>{isJoining ? "Joininng..." : "Join"}</button>
+        <input
+          type="text"
+          placeholder="Room ID"
+          value={roomID}
+          onChange={handleRoomIDChange}
+        />
+        <button type="submit" disabled={isJoining}>
+          {isJoining ? "Joininng..." : "Join"}
+        </button>
       </form>
     </div>
   );

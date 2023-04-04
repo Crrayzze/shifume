@@ -1,21 +1,26 @@
 class GameService {
 
+  constructor() {
+    this.roomId = null;
+  }
+
   async joinGameRoom(socket, roomId) {
     return new Promise((resolve, reject) => {
-      console.log('joinGameRoom')
-      socket.emit('join_game', { roomId });
-      socket.on('room_joined', () => resolve(true))
-      socket.on('room_join_error', ({ error }) => reject(error))
-    })
+      socket.emit("join_game", { roomId });
+      socket.on("room_joined", () => {
+        this.roomId = roomId
+        resolve(true)
+      });
+      socket.on("room_join_error", ({ error }) => reject(error));
+    });
   }
 
   updateGame(socket, gameChoice) {
-    socket.emit('update_game', { gameChoice: gameChoice, from: socket.id });
+    socket.emit("update_game", { gameChoice: gameChoice, from: socket.id });
   }
 
   async onGameUpdate(socket, listener) {
-    socket.on('on_game_update', listener);
-    console.log('onGameUpdate')
+    socket.on("on_game_update", listener);
   }
 
   async onGameStart(socket, listener) {
@@ -30,6 +35,9 @@ class GameService {
     socket.on("on_new_round", listener);
   }
 
+  async leaveGameRoom(socket) {
+    socket.emit("leave_game", { roomId: this.roomId });
+  }
 }
 
 const gameService = new GameService();
