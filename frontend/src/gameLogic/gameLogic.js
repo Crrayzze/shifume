@@ -13,7 +13,8 @@ export class GameLogic {
     setRound,
     setRoundTime,
     setInterRoundTime,
-    setIsWaitingForOpponentChoice
+    setIsWaitingForOpponentChoice,
+    setIsGameOver
   ) {
     this.setUserChoice = setUserChoice;
     this.setOpponentChoice = setOpponentChoice;
@@ -24,10 +25,11 @@ export class GameLogic {
     this.setRoundTime = setRoundTime;
     this.setInterRoundTime = setInterRoundTime;
     this.setIsWaitingForOpponentChoice = setIsWaitingForOpponentChoice;
+    this.setIsGameOver = setIsGameOver;
   }
 
   sendUserChoice(choice) {
-    this.setChoice(choice);
+    this.setUserChoice(choice);
     if (socketService.socket)
       gameService.updateGame(socketService.socket, choice);
   }
@@ -65,18 +67,77 @@ export class GameLogic {
     }
   }
 
-  newRound(round) {
+  newRound(round, result) {
+    try {
+      const newRound = round + 1;
+      if (socketService.socket) {
+        this.setRound(newRound);
+        gameService.newRound(socketService.socket, newRound);
+        gameService.onNewRound(socketService.socket, (data) => {
+          this.setUserChoice(null);
+          this.setOpponentChoice(null);
+          this.setRoundTime(5);
+          this.setResult(null);
+          this.setInterRoundTime(null);
+          this.setIsWaitingForOpponentChoice(true);
+        });
+      } else {
+        console.log("pas de socket");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  checkRoundResult(userChoice, opponentChoice, userScore, opponentScore) {
+    if (userChoice && opponentChoice) {
+      if (userChoice === opponentChoice) {
+        this.setResult("It's a draw!");
+      } else if (userChoice === "rock" && opponentChoice === "scissors") {
+        this.setResult("You win!");
+        this.setUserScore(userScore + 1);
+      } else if (userChoice === "rock" && opponentChoice === "paper") {
+        this.setResult("You lose...");
+        this.setOpponentScore(opponentScore + 1);
+      } else if (userChoice === "paper" && opponentChoice === "rock") {
+        this.setResult("You win!");
+        this.setUserScore(userScore + 1);
+      } else if (userChoice === "paper" && opponentChoice === "scissors") {
+        this.setResult("You lose...");
+        this.setOpponentScore(opponentScore + 1);
+      } else if (userChoice === "scissors" && opponentChoice === "paper") {
+        this.setResult("You win!");
+        this.setUserScore(userScore + 1);
+      } else if (userChoice === "scissors" && opponentChoice === "rock") {
+        this.setResult("You lose...");
+        this.setOpponentScore(opponentScore + 1);
+      }
+    }
+  }
+
+  verifyWinCondition(userScore, opponentScore) {
+    if (userScore === 1) {
+      this.setResult("You win the game!");
+      this.setRound(null);
+      this.setRoundTime(null);
+      this.setInterRoundTime(null);
+      this.setIsGameOver(true);
+      return true
+    } else if (opponentScore === 1) {
+      this.setResult("You lose the game...");
+      this.setRound(null);
+      this.setRoundTime(null);
+      this.setInterRoundTime(null);
+      this.setIsGameOver(true);
+      return true
+    }
+    console.log("game not over")
+    return false
+  }
+
+  leaveTheGame() {
     if (socketService.socket) {
-      gameService.newRound(socketService.socket, round + 1);
-      gameService.onNewRound(socketService.socket, (data) => {
-        this.setRound(round + 1);
-        this.setUserChoice(null);
-        this.setOpponentChoice(null);
-        this.setRoundTime(5);
-        this.setResult(null);
-        this.setInterRoundTime(null);
-        this.setIsWaitingForOpponentChoice(true);
-      });
+      gameService.leaveGameRoom(socketService.socket);
     }
   }
 }

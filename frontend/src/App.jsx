@@ -28,7 +28,7 @@ function App() {
   return (
     <GameContext.Provider value={gameContextValue}>
       {!isInRoom && <JoinRoom />}
-      {isInRoom && <Game />}
+      {isInRoom && <Game setIsInRoom={setIsInRoom}/>}
     </GameContext.Provider>
   );
 }
