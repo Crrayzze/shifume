@@ -1,19 +1,27 @@
 import gameService from "../services/game/game";
 import socketService from "../services/socket/socket";
 
-export const choices = ["rock", "paper", "scissors"]
+export const choices = ["rock", "paper", "scissors"];
 
 export class GameLogic {
-
-  constructor(setUserChoice, setOpponentChoice, setUserScore, setOpponentScore, setResult, setRound, setRoundTime, setInterRoundTime) {
-    this.setUserChoice = setUserChoice
-    this.setOpponentChoice = setOpponentChoice
-    this.setUserScore = setUserScore
-    this.setOpponentScore = setOpponentScore
-    this.setResult = setResult
-    this.setRound = setRound
-    this.setRoundTime = setRoundTime
-    this.setInterRoundTime = setInterRoundTime
+  constructor(
+    setUserChoice,
+    setOpponentChoice,
+    setUserScore,
+    setOpponentScore,
+    setResult,
+    setRound,
+    setRoundTime,
+    setInterRoundTime
+  ) {
+    this.setUserChoice = setUserChoice;
+    this.setOpponentChoice = setOpponentChoice;
+    this.setUserScore = setUserScore;
+    this.setOpponentScore = setOpponentScore;
+    this.setResult = setResult;
+    this.setRound = setRound;
+    this.setRoundTime = setRoundTime;
+    this.setInterRoundTime = setInterRoundTime;
   }
 
   sendUserChoice(choice) {
@@ -39,9 +47,9 @@ export class GameLogic {
       gameService.onGameUpdate(socketService.socket, (data) => {
         if (data.from !== socketService.socket.id) {
           this.setOpponentChoice(data.gameChoice);
-          this.setInterRoundTime(5)
+          this.setInterRoundTime(5);
         }
-      })
+      });
     }
   }
 
@@ -50,21 +58,21 @@ export class GameLogic {
       gameService.onGameStart(socketService.socket, (data) => {
         this.setRound(1);
         this.setRoundTime(5);
-      })
+      });
     }
   }
 
   newRound(round) {
     if (socketService.socket) {
-      gameService.newRound(socketService.socket, round + 1)
+      gameService.newRound(socketService.socket, round + 1);
       gameService.onNewRound(socketService.socket, (data) => {
-        this.setRound(round + 1)
-        this.setUserChoice(null)
-        this.setOpponentChoice(null)
-        this.setRoundTime(5)
-        this.setResult(null)
-        this.setInterRoundTime(null)
-      })
+        this.setRound(round + 1);
+        this.setUserChoice(null);
+        this.setOpponentChoice(null);
+        this.setRoundTime(5);
+        this.setResult(null);
+        this.setInterRoundTime(null);
+      });
     }
   }
 }
