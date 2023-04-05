@@ -1,0 +1,68 @@
+.game-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  padding: 10px;
+
+}
+
+.game-info-vs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 16px;
+
+  text-shadow: 0px 0px 36px rgba(255, 255, 255, 0.25);
+  box-shadow:
+      inset 0px 2px 0px 1px rgb(255 255 255 / 15%),
+      1px 3px 1px 1px rgb(255 255 255 / 15%);
+}
+
+.game-info-vs div {
+  flex-basis: 33.33%;
+  text-align: center;
+}
+
+.game-info-vs h1:first-child {
+  margin-right: auto;
+}
+
+.game-info-vs h1:last-child {
+  margin-left: auto;
+}
+
+.game-info-score {
+  font-size: 30px;
+}
+
+.game-info-pts {
+  font-size: 20px;
+}
+
+.your-score {
+  color: var(--color-green);
+}
+
+.opponent-score {
+  color: var(--color-red);
+}
+
+@media screen and (max-width: 800px) {
+  .game-info-vs {
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    height: 100%;
+
+  }
+}

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Timer } from "../../components/timer/timer";
 import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
-import gameService from "../../services/game/game";
 import { WaitingRoom } from "../../components/waitingRoom/waitingRoom";
+import { GameInfo } from "../../components/gameInfo/gameInfo";
+import { GameButtons } from "../../components/gameButtons/gameButtons";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -46,74 +47,79 @@ export const Game = ({ setIsInRoom }) => {
     );
   }, [userChoice, opponentChoice]);
 
-  if (round === 0) return <WaitingRoom />;
+  return (
+    <div>
+      {round === 0 && <WaitingRoom />}
+      {round > 0 && (
+        <>
+          {/* Game info */}
+          <GameInfo opponentScore={opponentScore} userScore={userScore} />
+          
+          {/* TODO: Timer */}
+          <Timer
+            timeOver={() => {
+              gameLogic.roundTimeOver(userChoice);
+            }}
+            seconds={roundTime}
+            setSeconds={setRoundTime}
+          />
 
-  // return (
-  //   <div>
-  //     {round === 0 && (
-  //       <WaitingRoom />
-  //     )}
-  //     {round > 0 && (
-  //       <>
-  //         <h1>You VS Opponent</h1>
-  //         <div>Your score: {userScore}</div>
-  //         <div>Opponent score: {opponentScore}</div>
-  //         <div>Round: {round}</div>
-  //         {choices.map((choice) => {
-  //           return (
-  //             <button
-  //               key={choice}
-  //               onClick={() => gameLogic.sendUserChoice(choice)}
-  //             >
-  //               {choice}
-  //             </button>
-  //           );
-  //         })}
-  //         <p>Your choice: {userChoice}</p>
-  //         <p>Opponent choice: {opponentChoice}</p>
-  //         <Timer
-  //           timeOver={() => {
-  //             gameLogic.roundTimeOver(userChoice);
-  //           }}
-  //           seconds={roundTime}
-  //           setSeconds={setRoundTime}
-  //         />
-  //         {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
-  //           <h1>Waiting for opponent choice</h1>
-  //         )}
-  //         {interRoundTime >= 0 &&
-  //           !isWaitingForOpponentChoice &&
-  //           !isGameOver && (
-  //             <>
-  //               <h1>{result}</h1>
-  //               <h1>Next round in {interRoundTime} seconds</h1>
-  //               <Timer
-  //                 timeOver={() => {
-  //                   if (!gameLogic.verifyWinCondition(userScore, opponentScore))
-  //                     gameLogic.newRound(round);
-  //                   console.log("actual round: ", round);
-  //                 }}
-  //                 seconds={interRoundTime}
-  //                 setSeconds={setInterRoundTime}
-  //               />
-  //             </>
-  //           )}
-  //       </>
-  //     )}
-  //     {isGameOver && (
-  //       <>
-  //         <h1>Game over!</h1>
-  //         <h1>{result}</h1>
-  //         <button
-  //           onClick={() => {
-  //             setIsInRoom(false);
-  //             gameLogic.leaveTheGame();
-  //           }}
-  //         >
-  //           Leave room
-  //         </button>
-  //       </>
-  //     )}
-  //   </div>
-  // );
+          {/* Button */}
+          <GameButtons />
+          {choices.map((choice) => {
+            return (
+              <button
+                key={choice}
+                onClick={() => gameLogic.sendUserChoice(choice)}
+              >
+                {choice}
+              </button>
+            );
+          })}
+
+          {/* could be removed or moved to the inter round? */}
+          <p>Your choice: {userChoice}</p>
+          <p>Opponent choice: {opponentChoice}</p>
+          {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
+            <h1>Waiting for opponent choice</h1>
+          )}
+
+          {/* Inter round */}
+          {interRoundTime >= 0 &&
+            !isWaitingForOpponentChoice &&
+            !isGameOver && (
+              <>
+                <h1>{result}</h1>
+                <h1>Next round in {interRoundTime} seconds</h1>
+                <Timer
+                  timeOver={() => {
+                    if (!gameLogic.verifyWinCondition(userScore, opponentScore))
+                      gameLogic.newRound(round);
+                    console.log("actual round: ", round);
+                  }}
+                  seconds={interRoundTime}
+                  setSeconds={setInterRoundTime}
+                />
+              </>
+            )}
+        </>
+      )}
+
+      {/* Game Over */}
+      {isGameOver && (
+        <>
+          <h1>Game over!</h1>
+          <h1>{result}</h1>
+          <button
+            onClick={() => {
+              setIsInRoom(false);
+              gameLogic.leaveTheGame();
+            }}
+          >
+            Leave room
+          </button>
+        </>
+      )}
+    </div>
+  );
 };
