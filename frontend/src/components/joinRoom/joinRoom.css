@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.play-label {
+  padding-left: 50px;
+}
+
 .join-room-container {
   display: flex;
   width: 100%;
@@ -85,12 +89,17 @@
     gap: 100px;
   }
 
+  .play-label {
+    padding-left: 0px;
+    padding-top: 20px;
+  }
+
   .join-room-container {
     flex-direction: column;
     align-items: center;
     gap: 10px;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 30px;
     font-size: 15px;
     padding-left: 0px;
   }
