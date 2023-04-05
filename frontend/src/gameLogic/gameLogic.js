@@ -28,7 +28,7 @@ export class GameLogic {
     this.setIsGameOver = setIsGameOver;
     this.initialRoundTime = 5;
     this.initialInterRoundTime = 5;
-    this.requiredScoreToWin = 3;
+    this.requiredScoreToWin = 30;
   }
 
   sendUserChoice(choice) {

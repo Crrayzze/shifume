@@ -60,17 +60,19 @@ export const Game = ({ setIsInRoom }) => {
           <GameInfo opponentScore={opponentScore} userScore={userScore} />
 
           {/* TODO: Timer */}
-          <Timer
-            timeOver={() => {
-              gameLogic.roundTimeOver(userChoice);
-            }}
-            seconds={roundTime}
-            setSeconds={setRoundTime}
-          />
 
           {/* Button */}
-          {roundTime > 0 && !isGameOver && (
-            <GameButtons handleChoice={handleChoice} roundTime={roundTime} />
+          {roundTime > -1 && !isGameOver && (
+            <>
+              <Timer
+                timeOver={() => {
+                  gameLogic.roundTimeOver(userChoice);
+                }}
+                seconds={roundTime}
+                setSeconds={setRoundTime}
+              />
+              <GameButtons handleChoice={handleChoice} roundTime={roundTime} />
+            </>
           )}
 
           {/* could be removed or moved to the inter round? */}
@@ -86,7 +88,6 @@ export const Game = ({ setIsInRoom }) => {
             !isGameOver && (
               <>
                 <h1>{result}</h1>
-                <h1>Next round in {interRoundTime} seconds</h1>
                 <Timer
                   timeOver={() => {
                     if (!gameLogic.verifyWinCondition(userScore, opponentScore))
