@@ -9,7 +9,7 @@ export const GameOver = ({ result, handleButtonClick }) => {
   return (
     <div className="game-over-container">
       <h1 className="game-over">Game over!</h1>
-      <h1 className={"game-over " + ((isWin) ? "win" : "lose")}>{result}</h1> s
+      <h1 className={"game-over " + ((isWin) ? "win" : "lose")}>{result}</h1>
       <button className="simple-button" onClick={handleButtonClick}>Quit</button>
     </div>
   );
