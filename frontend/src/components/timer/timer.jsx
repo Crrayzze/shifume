@@ -3,7 +3,7 @@ import "./timer.css";
 
 export const Timer = ({ timeOver, seconds, setSeconds, show }) => {
   const handleTime = () => {
-    if (seconds > -1 && show) {
+    if (seconds > -1) {
       setTimeout(() => setSeconds(seconds - 1), 1000);
     }
     if (seconds === 0) {

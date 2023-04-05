@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Timer } from "../../components/timer/timer";
-import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
 import { WaitingRoom } from "../../components/waitingRoom/waitingRoom";
 import { GameInfo } from "../../components/gameInfo/gameInfo";
 import { GameButtons } from "../../components/gameButtons/gameButtons";
 import { Waiting } from "../../components/waiting/waiting";
 import { RoundResult } from "../../components/roundResult/roundResult";
+import { GameOver } from "../../components/gameOver/gameOver";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -37,6 +37,11 @@ export const Game = ({ setIsInRoom }) => {
 
   const handleChoice = (choice) => {
     gameLogic.sendUserChoice(choice);
+  };
+
+  const leaveRoom = () => {
+    gameLogic.leaveTheGame();
+    setIsInRoom(false);
   };
 
   useEffect(() => {
@@ -78,7 +83,7 @@ export const Game = ({ setIsInRoom }) => {
             </>
           )}
 
-          {/* could be removed or moved to the inter round? */}
+          {/* Waiting for opponentChoice */}
           {isWaitingForOpponentChoice && roundTime < 0 && !isGameOver && (
             <Waiting />
           )}
@@ -97,7 +102,6 @@ export const Game = ({ setIsInRoom }) => {
                   timeOver={() => {
                     if (!gameLogic.verifyWinCondition(userScore, opponentScore))
                       gameLogic.newRound(round);
-                    console.log("actual round: ", round);
                   }}
                   seconds={interRoundTime}
                   setSeconds={setInterRoundTime}
@@ -109,20 +113,7 @@ export const Game = ({ setIsInRoom }) => {
       )}
 
       {/* Game Over */}
-      {isGameOver && (
-        <>
-          <h1>Game over!</h1>
-          <h1>{result}</h1>
-          <button
-            onClick={() => {
-              setIsInRoom(false);
-              gameLogic.leaveTheGame();
-            }}
-          >
-            Leave room
-          </button>
-        </>
-      )}
+      {isGameOver && <GameOver handleButtonClick={leaveRoom} result={result} />}
     </div>
   );
 };
