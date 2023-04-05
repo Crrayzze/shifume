@@ -1,0 +1,11 @@
+.timer {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 300;
+  padding-bottom: 30px;
+}
+
+.hide {
+  display: none;
+}

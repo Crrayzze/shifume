@@ -15,7 +15,7 @@ export const Scissors = () => {
       <g filter="url(#filter1_i_40_22)">
         <circle cx="50" cy="50" r="37.2222" fill="#D9D9D9" />
       </g>
-      <g clip-path="url(#clip0_40_22)">
+      <g clipPath="url(#clip0_40_22)">
         <path
           d="M31.8125 45.9583C29.9517 45.9583 28.4445 47.4655 28.4445 49.3264C28.4445 51.1872 29.9517 52.6944 31.8125 52.6944H46.9856C46.3457 53.4102 45.9583 54.3532 45.9583 55.3889C45.9583 57.5192 47.6003 59.2622 49.6885 59.4221C49.0401 60.1378 48.6528 61.0893 48.6528 62.125C48.6528 64.3563 50.4631 66.1667 52.6945 66.1667H60.7778C66.7308 66.1667 71.5556 61.3419 71.5556 55.3889V45.8657C71.5556 42.4808 70.2083 39.2306 67.817 36.8309C65.8972 34.9111 63.2954 33.8333 60.5841 33.8333H56.7361C54.9426 33.8333 53.427 35.0037 52.8965 36.6204L59.1695 38.616C59.8768 38.8433 60.2726 39.6011 60.0452 40.3084C59.8179 41.0157 59.0601 41.4115 58.3528 41.1841L52.6945 39.3822V39.3906L35.5174 33.9849C33.7407 33.4292 31.8546 34.4143 31.2905 36.191C30.7263 37.9676 31.7199 39.8537 33.4965 40.4179L51.1367 45.9583H31.8125Z"
           fill="#1F2637"
@@ -29,9 +29,9 @@ export const Scissors = () => {
           width="101"
           height="102"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -64,9 +64,9 @@ export const Scissors = () => {
           width="74.4445"
           height="74.4445"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -106,8 +106,8 @@ export const Scissors = () => {
           y2="100"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B70B00" />
-          <stop offset="1" stop-color="#6A0000" />
+          <stop stopColor="#B70B00" />
+          <stop offset="1" stopColor="#6A0000" />
         </linearGradient>
         <clipPath id="clip0_40_22">
           <rect
