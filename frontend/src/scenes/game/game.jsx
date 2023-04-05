@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Timer } from "../../components/timer/timer";
-import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
 import { WaitingRoom } from "../../components/waitingRoom/waitingRoom";
 import { GameInfo } from "../../components/gameInfo/gameInfo";
 import { GameButtons } from "../../components/gameButtons/gameButtons";
+import { Waiting } from "../../components/waiting/waiting";
+import { RoundResult } from "../../components/roundResult/roundResult";
+import { GameOver } from "../../components/gameOver/gameOver";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -33,6 +35,15 @@ export const Game = ({ setIsInRoom }) => {
     );
   }, []);
 
+  const handleChoice = (choice) => {
+    gameLogic.sendUserChoice(choice);
+  };
+
+  const leaveRoom = () => {
+    gameLogic.leaveTheGame();
+    setIsInRoom(false);
+  };
+
   useEffect(() => {
     gameLogic.handleGameUpdate();
     gameLogic.startGame();
@@ -54,34 +65,27 @@ export const Game = ({ setIsInRoom }) => {
         <>
           {/* Game info */}
           <GameInfo opponentScore={opponentScore} userScore={userScore} />
-          
+
           {/* TODO: Timer */}
-          <Timer
-            timeOver={() => {
-              gameLogic.roundTimeOver(userChoice);
-            }}
-            seconds={roundTime}
-            setSeconds={setRoundTime}
-          />
 
           {/* Button */}
-          <GameButtons />
-          {choices.map((choice) => {
-            return (
-              <button
-                key={choice}
-                onClick={() => gameLogic.sendUserChoice(choice)}
-              >
-                {choice}
-              </button>
-            );
-          })}
+          {roundTime > -1 && !isGameOver && (
+            <>
+              <Timer
+                timeOver={() => {
+                  gameLogic.roundTimeOver(userChoice);
+                }}
+                seconds={roundTime}
+                setSeconds={setRoundTime}
+                show={true}
+              />
+              <GameButtons handleChoice={handleChoice} roundTime={roundTime} />
+            </>
+          )}
 
-          {/* could be removed or moved to the inter round? */}
-          <p>Your choice: {userChoice}</p>
-          <p>Opponent choice: {opponentChoice}</p>
-          {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
-            <h1>Waiting for opponent choice</h1>
+          {/* Waiting for opponentChoice */}
+          {isWaitingForOpponentChoice && roundTime < 0 && !isGameOver && (
+            <Waiting />
           )}
 
           {/* Inter round */}
@@ -89,16 +93,19 @@ export const Game = ({ setIsInRoom }) => {
             !isWaitingForOpponentChoice &&
             !isGameOver && (
               <>
-                <h1>{result}</h1>
-                <h1>Next round in {interRoundTime} seconds</h1>
+                <RoundResult
+                  roundResult={result}
+                  opponentChoice={opponentChoice}
+                  userChoice={userChoice}
+                />
                 <Timer
                   timeOver={() => {
                     if (!gameLogic.verifyWinCondition(userScore, opponentScore))
                       gameLogic.newRound(round);
-                    console.log("actual round: ", round);
                   }}
                   seconds={interRoundTime}
                   setSeconds={setInterRoundTime}
+                  show={false}
                 />
               </>
             )}
@@ -106,20 +113,7 @@ export const Game = ({ setIsInRoom }) => {
       )}
 
       {/* Game Over */}
-      {isGameOver && (
-        <>
-          <h1>Game over!</h1>
-          <h1>{result}</h1>
-          <button
-            onClick={() => {
-              setIsInRoom(false);
-              gameLogic.leaveTheGame();
-            }}
-          >
-            Leave room
-          </button>
-        </>
-      )}
+      {isGameOver && <GameOver handleButtonClick={leaveRoom} result={result} />}
     </div>
   );
 };

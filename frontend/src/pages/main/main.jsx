@@ -15,12 +15,11 @@ export const Main = () => {
 
   useEffect(() => {
     connectSocket();
-    console.log("useEffect run");
   }, []);
 
   return (
     <div className="main-container">
-      <h1 className="game-name">SHIFUMI</h1>
+      <h1 className="game-name">SHIFUME</h1>
       
       {!isInRoom && <JoinRoom setIsInRoom={setIsInRoom} />}
       {isInRoom && <Game setIsInRoom={setIsInRoom} />}

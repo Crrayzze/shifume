@@ -28,7 +28,7 @@ export class GameLogic {
     this.setIsGameOver = setIsGameOver;
     this.initialRoundTime = 5;
     this.initialInterRoundTime = 5;
-    this.requiredScoreToWin = 3;
+    this.requiredScoreToWin = 1;
   }
 
   sendUserChoice(choice) {
@@ -111,8 +111,6 @@ export class GameLogic {
   }
 
   verifyWinCondition(userScore, opponentScore) {
-    console.log("verifying win condition")
-    console.log(userScore, opponentScore)
     if (userScore === this.requiredScoreToWin) {
       this.setResult("You win the game!");
       this.setRound(null);
