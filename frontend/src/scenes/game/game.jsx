@@ -4,6 +4,7 @@ import { choices } from "../../gameLogic/gameLogic";
 import { GameLogic } from "../../gameLogic/gameLogic";
 import { WaitingRoom } from "../../components/waitingRoom/waitingRoom";
 import { GameInfo } from "../../components/gameInfo/gameInfo";
+import { GameButtons } from "../../components/gameButtons/gameButtons";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -64,6 +65,7 @@ export const Game = ({ setIsInRoom }) => {
           />
 
           {/* Button */}
+          <GameButtons />
           {choices.map((choice) => {
             return (
               <button
@@ -75,6 +77,7 @@ export const Game = ({ setIsInRoom }) => {
             );
           })}
 
+          {/* could be removed or moved to the inter round? */}
           <p>Your choice: {userChoice}</p>
           <p>Opponent choice: {opponentChoice}</p>
           {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
