@@ -1,7 +1,7 @@
 import gameService from "../services/game/game";
 import socketService from "../services/socket/socket";
 
-export const choices = ["rock", "paper", "scissors"];
+export const choices = ["paper", "rock", "scissors"];
 
 export class GameLogic {
   constructor(
