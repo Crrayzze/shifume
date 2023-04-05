@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import "./timer.css"
+import "./timer.css";
 
-export const Timer = ({ timeOver, seconds, setSeconds }) => {
+export const Timer = ({ timeOver, seconds, setSeconds, show }) => {
   const handleTime = () => {
-    if (seconds > -1) {
+    if (seconds > -1 && show) {
       setTimeout(() => setSeconds(seconds - 1), 1000);
     }
     if (seconds === 0) {
@@ -19,14 +19,15 @@ export const Timer = ({ timeOver, seconds, setSeconds }) => {
   else if (seconds === 2) fontColor = "orange";
   else if (seconds <= 1) fontColor = "red";
 
-
   useEffect(() => {
     handleTime();
   }, [seconds]);
 
   return (
-    <div className="timer">
-      <h1 style={{ color: fontColor }}>{seconds}</h1>
+    <div className={"timer " + (show ? "" : "hide")}>
+      <h1 style={{ color: fontColor }}>
+        {seconds === 0 ? "Time is over!" : `${seconds}`}
+      </h1>
     </div>
   );
 };

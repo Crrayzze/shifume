@@ -3,7 +3,6 @@ import "./gameButtons.css";
 import { Rock } from "../rock/rock";
 import { Paper } from "../paper/paper";
 import { Scissors } from "../scissors/scissors";
-// import { choices } from "../../gameLogic/gameLogic";
 
 export const GameButtons = ({ handleChoice, roundTime }) => {
   const [clicked, setClicked] = useState(false);

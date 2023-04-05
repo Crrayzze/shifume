@@ -5,6 +5,8 @@ import { GameLogic } from "../../gameLogic/gameLogic";
 import { WaitingRoom } from "../../components/waitingRoom/waitingRoom";
 import { GameInfo } from "../../components/gameInfo/gameInfo";
 import { GameButtons } from "../../components/gameButtons/gameButtons";
+import { Waiting } from "../../components/waiting/waiting";
+import { RoundResult } from "../../components/roundResult/roundResult";
 
 export const Game = ({ setIsInRoom }) => {
   const [userChoice, setUserChoice] = useState(null);
@@ -70,16 +72,15 @@ export const Game = ({ setIsInRoom }) => {
                 }}
                 seconds={roundTime}
                 setSeconds={setRoundTime}
+                show={true}
               />
               <GameButtons handleChoice={handleChoice} roundTime={roundTime} />
             </>
           )}
 
           {/* could be removed or moved to the inter round? */}
-          <p>Your choice: {userChoice}</p>
-          <p>Opponent choice: {opponentChoice}</p>
-          {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
-            <h1>Waiting for opponent choice</h1>
+          {isWaitingForOpponentChoice && roundTime < 0 && !isGameOver && (
+            <Waiting />
           )}
 
           {/* Inter round */}
@@ -87,7 +88,11 @@ export const Game = ({ setIsInRoom }) => {
             !isWaitingForOpponentChoice &&
             !isGameOver && (
               <>
-                <h1>{result}</h1>
+                <RoundResult
+                  roundResult={result}
+                  opponentChoice={opponentChoice}
+                  userChoice={userChoice}
+                />
                 <Timer
                   timeOver={() => {
                     if (!gameLogic.verifyWinCondition(userScore, opponentScore))
@@ -96,6 +101,7 @@ export const Game = ({ setIsInRoom }) => {
                   }}
                   seconds={interRoundTime}
                   setSeconds={setInterRoundTime}
+                  show={false}
                 />
               </>
             )}
