@@ -1,12 +1,14 @@
 import React from "react";
-import tutorialPicture from '../../assets/tutorial.png'
-import './tutorial.css'
+import tutorialPicture from "../../assets/tutorial.png";
+import "./tutorial.css";
 
 export const Tutorial = () => {
   return (
-    <div>
+    <div className="tutorial-wrapper">
       <h1>Tutorial</h1>
-      <img src={tutorialPicture} alt="Tutorial" className="tutorial-image" />
+      <div className="tutorial-image-container">
+        <img src={tutorialPicture} alt="Tutorial" className="tutorial-image" />
+      </div>
     </div>
   );
-}
+};
