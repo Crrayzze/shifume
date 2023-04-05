@@ -41,12 +41,10 @@ let GameController = class GameController {
     }
     start_new_round(io, socket, message) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("here");
             const room = this.getGameRoom(socket);
             if (room) {
                 io.to(room).emit("on_new_round", message);
                 io.emit("on_new_round", message);
-                console.log("START NEW ROUND");
             }
         });
     }

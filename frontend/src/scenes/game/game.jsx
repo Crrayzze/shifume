@@ -56,6 +56,7 @@ export const Game = ({ setIsInRoom }) => {
       userScore,
       opponentScore
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userChoice, opponentChoice]);
 
   return (
