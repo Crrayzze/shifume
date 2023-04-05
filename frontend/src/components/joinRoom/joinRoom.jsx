@@ -54,7 +54,7 @@ export const JoinRoom = ({ setIsInRoom }) => {
   return (
     <div className="join-room-wrapper">
       <div>
-        <h1>Play</h1>
+        <h1 className="play-label">Play</h1>
         <div className="join-room-container">
           <form>
             <h1 className="join-room-label">Create a new game</h1>
