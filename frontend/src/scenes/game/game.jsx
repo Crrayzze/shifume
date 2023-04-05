@@ -52,8 +52,16 @@ export const Game = ({ setIsInRoom }) => {
       {round > 0 && (
         <>
           {/* Game info */}
-          <GameInfo />
-
+          <GameInfo opponentScore={opponentScore} userScore={userScore} />
+          
+          {/* TODO: Timer */}
+          <Timer
+            timeOver={() => {
+              gameLogic.roundTimeOver(userChoice);
+            }}
+            seconds={roundTime}
+            setSeconds={setRoundTime}
+          />
 
           {/* Button */}
           {choices.map((choice) => {
@@ -66,20 +74,12 @@ export const Game = ({ setIsInRoom }) => {
               </button>
             );
           })}
-          <Timer
-            timeOver={() => {
-              gameLogic.roundTimeOver(userChoice);
-            }}
-            seconds={roundTime}
-            setSeconds={setRoundTime}
-          />
 
           <p>Your choice: {userChoice}</p>
           <p>Opponent choice: {opponentChoice}</p>
           {isWaitingForOpponentChoice && roundTime === 0 && !isGameOver && (
             <h1>Waiting for opponent choice</h1>
           )}
-
 
           {/* Inter round */}
           {interRoundTime >= 0 &&
@@ -99,10 +99,8 @@ export const Game = ({ setIsInRoom }) => {
                 />
               </>
             )}
-
         </>
       )}
-
 
       {/* Game Over */}
       {isGameOver && (
@@ -119,8 +117,6 @@ export const Game = ({ setIsInRoom }) => {
           </button>
         </>
       )}
-
-
     </div>
   );
 };
