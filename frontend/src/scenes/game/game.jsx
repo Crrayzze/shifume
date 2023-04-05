@@ -33,6 +33,10 @@ export const Game = ({ setIsInRoom }) => {
     );
   }, []);
 
+  const handleChoice = (choice) => {
+    gameLogic.sendUserChoice(choice);
+  };
+
   useEffect(() => {
     gameLogic.handleGameUpdate();
     gameLogic.startGame();
@@ -54,7 +58,7 @@ export const Game = ({ setIsInRoom }) => {
         <>
           {/* Game info */}
           <GameInfo opponentScore={opponentScore} userScore={userScore} />
-          
+
           {/* TODO: Timer */}
           <Timer
             timeOver={() => {
@@ -65,17 +69,9 @@ export const Game = ({ setIsInRoom }) => {
           />
 
           {/* Button */}
-          <GameButtons />
-          {choices.map((choice) => {
-            return (
-              <button
-                key={choice}
-                onClick={() => gameLogic.sendUserChoice(choice)}
-              >
-                {choice}
-              </button>
-            );
-          })}
+          {roundTime > 0 && !isGameOver && (
+            <GameButtons handleChoice={handleChoice} roundTime={roundTime} />
+          )}
 
           {/* could be removed or moved to the inter round? */}
           <p>Your choice: {userChoice}</p>

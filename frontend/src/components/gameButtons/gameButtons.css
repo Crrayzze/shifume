@@ -18,3 +18,11 @@
 .game-button:hover {
   transform: scale(1.1);
 }
+
+.selected {
+  transform: scale(1.1);
+}
+
+.other-button-selected {
+  display: none;
+}

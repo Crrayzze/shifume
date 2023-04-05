@@ -32,6 +32,7 @@ export class GameLogic {
   }
 
   sendUserChoice(choice) {
+    console.log("sending user choice", choice)
     this.setUserChoice(choice);
   }
 
